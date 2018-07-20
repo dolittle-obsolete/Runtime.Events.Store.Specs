@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="specs.props"></Import>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Dolittle.Runtime.Events.Store.Specs</AssemblyName>
+    <RootNamespace>Dolittle.Runtime.Events.Store.Specs</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Dolittle.Runtime.Events" Version="2.0.0-*" />
+    <PackageReference Include="Dolittle.Runtime.Events.Store" Version="2.0.0-*" />
+    <PackageReference Include="Dolittle.Dynamic" Version="2.0.0-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mongo2Go" Version="2.2.1" />
+    <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.4.4" />
+  </ItemGroup>
+
+</Project>
