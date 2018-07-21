@@ -20,4 +20,19 @@ implementation .csproj file:
     <Compile Include="./Specs/**/*.cs" Exclude="./Specs/obj/**/*.cs;./Specs/bin/**/*.cs"/>
   </ItemGroup>
   
-```  
+``` 
+
+The implementation should implement the IProvideTheEventStore interface which has a single Build() method
+that returns the implmentation of the EventStore that you wish to test.
+
+``` 
+using Dolittle.Runtime.Events.Store.Specs;
+
+namespace Dolittle.Runtime.Events.Store.InMemory.Specs
+{
+    public class SUTProvider : IProvideTheEventStore
+    {
+        public IEventStore Build() => new InMemory.EventStore();
+    }
+}
+``` 
