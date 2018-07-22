@@ -10,7 +10,8 @@ namespace Dolittle.Runtime.Events.Store.Specs.given
 {
     public class an_event_store
     {
-        public static readonly IApplicationArtifactIdentifier event_source_artifact = new Mock<IApplicationArtifactIdentifier>().Object;      
+        public static readonly IApplicationArtifactIdentifier event_source_artifact = new Mock<IApplicationArtifactIdentifier>().Object;  
+        public static ConcurrentDictionary<Type,IApplicationArtifactIdentifier> event_artifacts = new ConcurrentDictionary<Type, IApplicationArtifactIdentifier>();    
 
         static Type _sut_provider_type;
         protected static Func<IEventStore> get_event_store = () => {

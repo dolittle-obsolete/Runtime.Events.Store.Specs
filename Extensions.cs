@@ -12,8 +12,6 @@ namespace Dolittle.Runtime.Events.Store.Specs
 {
     public static class Extensions
     {   
-        static ConcurrentDictionary<Type,IApplicationArtifactIdentifier> _event_artifacts = new ConcurrentDictionary<Type, IApplicationArtifactIdentifier>();
-
         public static void _do(this IEventStore event_store, Action<IEventStore> @do)
         {
             try
@@ -110,7 +108,6 @@ namespace Dolittle.Runtime.Events.Store.Specs
             return EventStream.From(envelopes);
         }
 
-
         public static EventSourceVersion Next(this EventSourceVersion version)
         {
             return new EventSourceVersion((version.Commit + 1),0);
@@ -123,7 +120,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         public static IApplicationArtifactIdentifier ToArtifact(this IEvent @event)
         {
-            return _event_artifacts.GetOrAdd(@event.GetType(),new Mock<IApplicationArtifactIdentifier>().Object);
+            return given.an_event_store.event_artifacts.GetOrAdd(@event.GetType(),new Mock<IApplicationArtifactIdentifier>().Object);
         }
 
         public static EventEnvelope ToNewEnvelope(this EventEnvelope envelope, VersionedEventSource versionedEventSource, DateTimeOffset committed, CorrelationId correlationId)
