@@ -35,4 +35,5 @@ namespace Dolittle.Runtime.Events.Store.InMemory.Specs
         public IEventStore Build() => new InMemory.EventStore();
     }
 }
+
 ``` 
