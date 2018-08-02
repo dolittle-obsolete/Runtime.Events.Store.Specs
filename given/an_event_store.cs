@@ -5,14 +5,14 @@ using System.Reflection;
 using Machine.Specifications;
 using Moq;
 using Dolittle.Runtime.Events.Store.Specs;
-using Dolittle.Applications;
+using Dolittle.Artifacts;
 
 namespace Dolittle.Runtime.Events.Store.Specs.given
 {
     public class an_event_store
     {
-        public static readonly IApplicationArtifactIdentifier event_source_artifact = new Mock<IApplicationArtifactIdentifier>().Object;  
-        public static ConcurrentDictionary<Type,IApplicationArtifactIdentifier> event_artifacts = new ConcurrentDictionary<Type, IApplicationArtifactIdentifier>();    
+        public static readonly ArtifactId event_source_artifact = Guid.NewGuid();  
+        public static ConcurrentDictionary<Type,ArtifactId> event_artifacts = new ConcurrentDictionary<Type, ArtifactId>();    
 
         static Type _sut_provider_type;
         protected static Func<IEventStore> get_event_store = () => {
