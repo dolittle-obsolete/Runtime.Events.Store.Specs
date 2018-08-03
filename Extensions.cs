@@ -29,7 +29,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
         {
             var committed = now ?? DateTimeOffset.Now;
             var events = BuildEvents();
-            VersionedEventSource versionedEventSource = eventSourceId.InitialVersion();
+            VersionedEventSource versionedEventSource = eventSourceId.InitialVersion(eventSourceArtifact);
             return BuildFrom(versionedEventSource,committed,correlationId ?? Guid.NewGuid(),events);
             
         }
@@ -90,9 +90,9 @@ namespace Dolittle.Runtime.Events.Store.Specs
             yield return new SimpleEvent("Fourth",4);
         }
 
-        public static VersionedEventSource InitialVersion(this EventSourceId eventSourceId)
+        public static VersionedEventSource InitialVersion(this EventSourceId eventSourceId, ArtifactId artifact)
         {
-            return new VersionedEventSource(EventSourceVersion.Initial(), eventSourceId);
+            return new VersionedEventSource(EventSourceVersion.Initial(), eventSourceId, artifact);
         }
 
         public static VersionedEventSource Next(this VersionedEventSource version)
@@ -100,7 +100,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             Ensure.IsNotNull("version",version);
             Ensure.ArgumentPropertyIsNotNull("version","Version",version.Version);
             Ensure.ArgumentPropertyIsNotNull("version","EventSource",version.EventSource);
-            return new VersionedEventSource(version.Version.Next(), version.EventSource);
+            return new VersionedEventSource(version.Version.Next(), version.EventSource, version.Artifact);
         }
 
         public static EventStream ToEventStream(this IEnumerable<EventEnvelope> envelopes)
