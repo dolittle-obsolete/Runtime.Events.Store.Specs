@@ -85,9 +85,9 @@ namespace Dolittle.Runtime.Events.Store.Specs
         static IEnumerable<IEvent> BuildEvents()
         {
             yield return new SimpleEvent("First",1);
-            yield return new SimpleEvent("Second",2);
+            yield return new AnotherSimpleEvent("Second",2);
             yield return new SimpleEvent("Third",3);
-            yield return new SimpleEvent("Fourth",4);
+            yield return new AnotherSimpleEvent("Fourth",4);
         }
 
         public static VersionedEventSource InitialVersion(this EventSourceId eventSourceId, ArtifactId artifact)
