@@ -7,6 +7,7 @@ using Dolittle.PropertyBags;
 using Dolittle.Artifacts;
 using Dolittle.Events;
 using Dolittle.Runtime.Events.Store;
+using Dolittle.Collections;
 
 namespace Dolittle.Runtime.Events.Store.Specs
 {
@@ -36,15 +37,29 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         private static UncommittedEventStream BuildFrom(VersionedEventSource version, DateTimeOffset committed, CorrelationId correlationId, IEnumerable<IEvent> events)
         {
-            var envelopes = events.Select(e => e.ToEnvelope(EventId.New(),BuildEventMetadata(version, e.ToArtifact().Initial(), correlationId, committed))).ToList();
+            var envelopes = new List<EventEnvelope>();
+            VersionedEventSource vsn = null;
+            events.ForEach(e => 
+            {
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.IncrementSequence(),vsn.EventSource,vsn.Artifact);
+                envelopes.Add(e.ToEnvelope(EventId.New(),BuildEventMetadata(vsn, e.ToArtifact().Initial(), correlationId, committed)));
+            });
+
             if(envelopes == null || !envelopes.Any())
                 throw new ApplicationException("There are no envelopes");
             return BuildStreamFrom(envelopes.ToEventStream());
         }
 
         private static UncommittedEventStream BuildFrom(VersionedEventSource version, DateTimeOffset committed, CorrelationId correlationId, IEnumerable<EventEnvelope> events)
-        {
-            var envelopes = events.Select(e => e.ToNewEnvelope(version,committed,correlationId)).ToList();
+        {   
+            var envelopes = new List<EventEnvelope>();
+            VersionedEventSource vsn = null;
+            events.ForEach(e => 
+            {
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.IncrementSequence(),vsn.EventSource,vsn.Artifact);
+                envelopes.Add(e.ToNewEnvelope(vsn,committed,correlationId));
+            });
+
             if(envelopes == null || !envelopes.Any())
                 throw new ApplicationException("There are no envelopes");
             return BuildStreamFrom(envelopes.ToEventStream());
