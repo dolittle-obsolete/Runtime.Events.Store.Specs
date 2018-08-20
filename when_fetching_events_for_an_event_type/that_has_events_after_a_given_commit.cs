@@ -37,7 +37,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         It should_retrieve_the_events_in_commit_order = () => result.ShouldBeInOrder();
         It should_have_the_events_in_only_commit_after_the_specified = () => 
         {
-            result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(third_commit.Events);
+            result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(third_commit.Events.FilteredByEventType(event_artifacts[typeof(SimpleEvent)]));
         };
         Cleanup nh = () => event_store.Dispose();               
     }    
