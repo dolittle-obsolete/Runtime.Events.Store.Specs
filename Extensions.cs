@@ -93,7 +93,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         public static VersionedEventSource InitialVersion(this EventSourceId eventSourceId, ArtifactId artifact)
         {
-            return new VersionedEventSource(EventSourceVersion.Initial(), eventSourceId, artifact);
+            return new VersionedEventSource(EventSourceVersion.Initial, eventSourceId, artifact);
         }
 
         public static VersionedEventSource Next(this VersionedEventSource version)
