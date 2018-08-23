@@ -7,6 +7,7 @@ using Dolittle.PropertyBags;
 using Dolittle.Artifacts;
 using Dolittle.Events;
 using Dolittle.Runtime.Events.Store;
+using Dolittle.Execution;
 
 namespace Dolittle.Runtime.Events.Store.Specs
 {
