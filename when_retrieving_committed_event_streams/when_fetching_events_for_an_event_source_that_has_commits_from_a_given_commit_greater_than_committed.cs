@@ -33,6 +33,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         Because of = () => event_store._do((es) => result = es.FetchFrom(event_source_id, 4));
 
         It should_retrieve_empty_commits = () => result.Count().ShouldEqual(0);
+        
         Cleanup nh = () => event_store.Dispose();               
     }      
 }
