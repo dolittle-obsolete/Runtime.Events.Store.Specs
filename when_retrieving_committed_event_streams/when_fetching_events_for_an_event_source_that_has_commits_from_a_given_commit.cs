@@ -16,7 +16,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         static UncommittedEventStream uncommitted_events;
         static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
-        static CommittedEvents result;
+        static Commits result;
 
         Establish context = () => 
         {

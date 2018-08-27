@@ -4,6 +4,7 @@ using System.Linq;
 using Dolittle.Runtime.Events.Store;
 using System.Diagnostics.Contracts;
 using Machine.Specifications;
+using Dolittle.Execution;
 
 namespace Dolittle.Runtime.Events.Store.Specs
 {
