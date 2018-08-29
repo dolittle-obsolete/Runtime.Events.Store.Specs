@@ -42,7 +42,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             VersionedEventSource vsn = null;
             events.ForEach(e => 
             {
-                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.IncrementSequence(),vsn.EventSource,vsn.Artifact);
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),vsn.EventSource,vsn.Artifact);
                 envelopes.Add(e.ToEnvelope(EventId.New(),BuildEventMetadata(vsn, e.ToArtifact().Initial(), correlationId, committed)));
             });
 
@@ -57,7 +57,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             VersionedEventSource vsn = null;
             events.ForEach(e => 
             {
-                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.IncrementSequence(),vsn.EventSource,vsn.Artifact);
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),vsn.EventSource,vsn.Artifact);
                 envelopes.Add(e.ToNewEnvelope(vsn,committed,correlationId));
             });
 

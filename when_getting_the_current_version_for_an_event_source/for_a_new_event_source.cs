@@ -1,4 +1,4 @@
-namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_version_for_an_event_source
+namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_current_version_for_an_event_source
 {
     using Machine.Specifications;
     using Dolittle.Runtime.Events.Store;
@@ -16,9 +16,9 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_version_for_an_ev
             event_store = get_event_store();
         };
 
-        Because of = () => event_store._do((event_store) => result = event_store.GetVersionFor(Guid.NewGuid()));
+        Because of = () => event_store._do((event_store) => result = event_store.GetCurrentVersionFor(Guid.NewGuid()));
 
-        It should_return_an_initial_version= () => result.IsInitial.ShouldBeTrue();
+        It should_return_no_version= () => result.ShouldEqual(EventSourceVersion.Initial);
 
         Cleanup nh = () => event_store.Dispose();       
     }

@@ -26,11 +26,11 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_version_for_an_ev
             var second_commit = event_store.Commit(uncommitted_events);
         };
 
-        Because of = () => event_store._do((es) => version = es.GetVersionFor(event_source_id));
+        Because of = () => event_store._do((es) => version = es.GetCurrentVersionFor(event_source_id));
 
         It should_get_a_version_with_the_latest_commit = () => ((long)version.Commit).ShouldEqual(2);
         It should_get_a_version_with_the_latest_sequence = () => ((long)version.Sequence).ShouldEqual(uncommitted_events.Events.Count() - 1);
-        It should_not_be_an_intial_version = () => version.IsInitial.ShouldBeFalse();
+        It should_not_be_an_intial_version = () => version.ShouldEqual(EventSourceVersion.Initial);
 
         Cleanup nh = () => event_store.Dispose();
     }
