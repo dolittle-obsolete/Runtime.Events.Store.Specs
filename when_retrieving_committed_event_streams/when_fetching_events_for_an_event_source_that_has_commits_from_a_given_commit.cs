@@ -16,7 +16,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         static UncommittedEventStream uncommitted_events;
         static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
-        static CommittedEvents result;
+        static Commits result;
 
         Establish context = () => 
         {
@@ -44,6 +44,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
             result.First().Events.ShouldContainOnly(second_commit.Events);
             result.Last().Events.ShouldContainOnly(third_commit.Events);
         };
+        
         Cleanup nh = () => event_store.Dispose();               
     }    
 }

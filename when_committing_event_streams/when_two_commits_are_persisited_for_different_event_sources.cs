@@ -56,6 +56,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
             first_committed_events.Sequence.ShouldEqual(new CommitSequenceNumber(1));
             second_committed_events.Sequence.ShouldEqual(new CommitSequenceNumber(2));
         };
+        
         Cleanup nh = () => event_store.Dispose();
     }
 }

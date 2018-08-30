@@ -3,19 +3,19 @@ using System.Linq;
 using System.Collections.Generic;
 using Machine.Specifications;
 
-namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_streams
+namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_type
 {
     [Subject(typeof(IFetchCommittedEvents))]
-    [Tags("michael")]
-    public class when_fetching_events_for_an_event_source_that_has_commits : given.an_event_store
+    public class that_has_events_from_a_given_commit_greater_than_committed : given.an_event_store
     {
         static IEventStore event_store;
         static CommittedEventStream first_commit;
         static CommittedEventStream second_commit;
+        static CommittedEventStream third_commit;
         static UncommittedEventStream uncommitted_events;
         static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
-        static Commits result;
+        static SingleEventTypeEventStream result;
 
         Establish context = () => 
         {
@@ -26,21 +26,13 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
             event_store._do((es) => first_commit = es.Commit(uncommitted_events));
             uncommitted_events = first_commit.BuildNext(DateTimeOffset.UtcNow);
             event_store._do((es) => second_commit = es.Commit(uncommitted_events));
+            uncommitted_events = second_commit.BuildNext(DateTimeOffset.UtcNow);
+            event_store._do((es) => third_commit = es.Commit(uncommitted_events));
         };
 
-        Because of = () => result = event_store.Fetch(event_source_id);
+        Because of = () => event_store._do((es) => result = es.FetchAllEventsOfTypeAfter(event_artifacts[typeof(SimpleEvent)],4));
 
-        It should_retrieve_all_the_commits_for_the_event_source = () => (result as IEnumerable<CommittedEventStream>).Count().ShouldEqual(2);
-        It should_retrieve_the_commits_in_order = () => 
-        {
-            result.First().Sequence.ShouldEqual(first_commit.Sequence);
-            result.Last().Sequence.ShouldEqual(second_commit.Sequence);
-        };
-        It should_have_the_events_in_each_commit = () => 
-        {
-            result.First().Events.ShouldContainOnly(first_commit.Events);
-            result.Last().Events.ShouldContainOnly(second_commit.Events);
-        };
+        It should_retrieve_no_events = () => result.Count().ShouldEqual(0);
         Cleanup nh = () => event_store.Dispose();               
-    }
+    }      
 }
