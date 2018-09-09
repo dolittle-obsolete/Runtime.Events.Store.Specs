@@ -9,7 +9,6 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_next_version_for_
     public class for_an_event_source_with_commits : given.an_event_store
     {
         static IEventStore event_store;
-        static CommittedEventStream committed_events;
         static UncommittedEventStream uncommitted_events;
         static EventSourceId event_source_id;
         static DateTimeOffset? occurred;

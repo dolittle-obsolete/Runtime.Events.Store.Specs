@@ -9,11 +9,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
     public class when_fetching_events_for_an_event_source_that_has_no_commits : given.an_event_store
     {
         static IEventStore event_store;
-        static CommittedEventStream first_commit;
-        static CommittedEventStream second_commit;
-        static UncommittedEventStream uncommitted_events;
         static EventSourceId event_source_id;
-        static DateTimeOffset? occurred;
         static Commits result;
 
         Establish context = () => 

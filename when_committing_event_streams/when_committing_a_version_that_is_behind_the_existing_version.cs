@@ -8,10 +8,8 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
     public class when_committing_a_version_that_is_behind_the_existing_version : given.an_event_store
     {
         static IEventStore event_store;
-        static CommittedEventStream committed_events;
         static UncommittedEventStream behind_uncommitted_events;
         static UncommittedEventStream latest_uncommitted_events;
-        static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
         static Exception exception;
 

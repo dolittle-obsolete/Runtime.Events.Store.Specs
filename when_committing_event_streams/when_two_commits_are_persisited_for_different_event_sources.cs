@@ -12,8 +12,6 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         static CommittedEventStream second_committed_events;
         static UncommittedEventStream first_uncommitted_events;
         static UncommittedEventStream second_uncommitted_events;
-        static EventSourceId first_event_source_id;
-        static EventSourceId second_event_source_id;
         static DateTimeOffset? occurred;
 
         Establish context = () => 

@@ -7,10 +7,8 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
     public class when_committing_a_version_that_conflicts_with_an_existing_commit : given.an_event_store
     {
         static IEventStore event_store;
-        static CommittedEventStream committed_events;
         static UncommittedEventStream uncommitted_events;
         static UncommittedEventStream conflicting_uncommitted_events;
-        static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
         static Exception exception;
 

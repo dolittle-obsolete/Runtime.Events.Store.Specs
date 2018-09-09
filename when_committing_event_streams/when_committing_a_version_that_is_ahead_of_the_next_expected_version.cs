@@ -10,10 +10,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         static IEventStore event_store;
         static CommittedEventStream committed_events;
         static UncommittedEventStream ahead_uncommitted_events;
-
-        static EventSourceId event_source_id;
         static DateTimeOffset? occurred;
-        static Exception exception;
 
         Establish context = () => 
         {

@@ -7,7 +7,6 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_next_version_for_
     [Subject(typeof(IFetchEventSourceVersion))]
     public class for_a_new_event_source : given.an_event_store
     {
-        static EventSourceId event_source_id;
         static IEventStore event_store;
         static EventSourceVersion result;
 
