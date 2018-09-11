@@ -15,7 +15,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_next_version_for_
             event_store = get_event_store();
         };
 
-        Because of = () => event_store._do((event_store) => result = event_store.GetNextVersionFor(Guid.NewGuid()));
+        Because of = () => event_store._do(_ => result = _.GetNextVersionFor(Guid.NewGuid()));
 
         It should_get_the_initial_version = () => result.ShouldEqual(EventSourceVersion.Initial);
 

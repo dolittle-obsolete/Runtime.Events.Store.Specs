@@ -18,7 +18,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
             var event_source = EventSourceId.New();
             uncommitted_events = event_source.BuildUncommitted(event_source_artifact, occurred);
-            event_store.Commit(uncommitted_events);
+            event_store._do(_ => _.Commit(uncommitted_events));
             conflicting_uncommitted_events = event_source.BuildUncommitted(event_source_artifact, occurred);
         };
 

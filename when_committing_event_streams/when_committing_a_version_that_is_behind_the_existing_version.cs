@@ -20,7 +20,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
             var event_source = EventSourceId.New();
             behind_uncommitted_events = event_source.BuildUncommitted(event_source_artifact, occurred);
             latest_uncommitted_events = behind_uncommitted_events.BuildNext(occurred);
-            event_store.Commit(latest_uncommitted_events);
+            event_store._do(_ => _.Commit(latest_uncommitted_events));
         };
 
         Because of = () => event_store._do((es) => exception = Catch.Exception(() => es.Commit(behind_uncommitted_events)));

@@ -20,9 +20,11 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_current_version_f
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
             event_source_id = EventSourceId.New();
             uncommitted_events = event_source_id.BuildUncommitted(event_source_artifact, occurred);
-            var commit = event_store.Commit(uncommitted_events);
+            CommittedEventStream commit = null;
+            event_store._do(_ => commit = _.Commit(uncommitted_events));
             uncommitted_events = commit.BuildNext(DateTimeOffset.UtcNow);
-            var second_commit = event_store.Commit(uncommitted_events);
+            CommittedEventStream second_commit = null;
+            event_store._do(_ => second_commit = _.Commit(uncommitted_events));
         };
 
         Because of = () => event_store._do((es) => version = es.GetCurrentVersionFor(event_source_id));

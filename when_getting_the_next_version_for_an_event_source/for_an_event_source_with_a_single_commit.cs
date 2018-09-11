@@ -20,7 +20,7 @@
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
             event_source_id = EventSourceId.New();
             uncommitted_events = event_source_id.BuildUncommitted(event_source_artifact, occurred);
-            event_store.Commit(uncommitted_events);
+            event_store._do(_ => _.Commit(uncommitted_events));
         };
 
         Because of = () => event_store._do((es) => version = es.GetNextVersionFor(event_source_id));
