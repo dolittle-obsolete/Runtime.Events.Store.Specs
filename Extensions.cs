@@ -43,7 +43,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             events.ForEach(e => 
             {
                 vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),vsn.EventSource,vsn.Artifact);
-                envelopes.Add(e.ToEnvelope(EventId.New(),BuildEventMetadata(vsn, e.ToArtifact().Initial(), correlationId, committed)));
+                envelopes.Add(e.ToEnvelope(BuildEventMetadata(EventId.New(),vsn, e.ToArtifact().Initial(), correlationId, committed)));
             });
 
             if(envelopes == null || !envelopes.Any())
@@ -84,9 +84,9 @@ namespace Dolittle.Runtime.Events.Store.Specs
             return BuildFrom(eventSourceVersion,committed,correlationId ?? Guid.NewGuid(), eventStream.Events);
         }
 
-        private static EventMetadata BuildEventMetadata(VersionedEventSource versionedEventSource, Artifact artifact, CorrelationId correlationId, DateTimeOffset committed)
+        private static EventMetadata BuildEventMetadata(EventId id, VersionedEventSource versionedEventSource, Artifact artifact, CorrelationId correlationId, DateTimeOffset committed)
         {
-            return new EventMetadata(versionedEventSource, correlationId, artifact, "A Test", committed);
+            return new EventMetadata(id, versionedEventSource, correlationId, artifact, "A Test", committed);
         }
 
         private static UncommittedEventStream BuildStreamFrom(EventStream stream)
@@ -141,7 +141,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         public static EventEnvelope ToNewEnvelope(this EventEnvelope envelope, VersionedEventSource versionedEventSource, DateTimeOffset committed, CorrelationId correlationId)
         {
-            return new EventEnvelope(EventId.New(),new EventMetadata(versionedEventSource,correlationId,envelope.Metadata.Artifact,envelope.Metadata.CausedBy,committed),envelope.Event);
+            return new EventEnvelope(new EventMetadata(EventId.New(),versionedEventSource,correlationId,envelope.Metadata.Artifact,envelope.Metadata.CausedBy,committed),envelope.Event);
         }
     }
 }
