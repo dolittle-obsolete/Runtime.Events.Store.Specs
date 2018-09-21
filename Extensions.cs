@@ -9,6 +9,8 @@ using Dolittle.Events;
 using Dolittle.Runtime.Events.Store;
 using Dolittle.Collections;
 using Dolittle.Execution;
+using Dolittle.Applications;
+using Dolittle.Tenancy;
 
 namespace Dolittle.Runtime.Events.Store.Specs
 {
@@ -86,7 +88,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         private static EventMetadata BuildEventMetadata(EventId id, VersionedEventSource versionedEventSource, Artifact artifact, CorrelationId correlationId, DateTimeOffset committed)
         {
-            return new EventMetadata(id, versionedEventSource, correlationId, artifact, "A Test", committed);
+            return new EventMetadata(id, versionedEventSource, correlationId, artifact, committed, GetOriginalContext());
         }
 
         private static UncommittedEventStream BuildStreamFrom(EventStream stream)
@@ -141,7 +143,17 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         public static EventEnvelope ToNewEnvelope(this EventEnvelope envelope, VersionedEventSource versionedEventSource, DateTimeOffset committed, CorrelationId correlationId)
         {
-            return new EventEnvelope(new EventMetadata(EventId.New(),versionedEventSource,correlationId,envelope.Metadata.Artifact,envelope.Metadata.CausedBy,committed),envelope.Event);
+            return new EventEnvelope(new EventMetadata(EventId.New(),versionedEventSource,correlationId,envelope.Metadata.Artifact,committed, envelope.Metadata.OriginalContext),envelope.Event);
         }
+
+        public static OriginalContext GetOriginalContext()
+        {
+            return new OriginalContext(Application,BoundedContext,Tenant,Environment,new Dolittle.Security.Claims(Enumerable.Empty<Dolittle.Security.Claim>()));
+        }
+
+        static readonly Application Application = Application.New();
+        static readonly BoundedContext BoundedContext = BoundedContext.New();
+        static readonly TenantId Tenant = Guid.NewGuid();
+        static readonly Execution.Environment Environment = "specs";
     }
 }
