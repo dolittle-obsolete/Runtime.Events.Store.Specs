@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Dolittle.Runtime.Events.Store.Specs.given;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_streams
 {
@@ -38,8 +39,22 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         };
         It should_have_the_events_in_each_commit = () => 
         {
-            result.First().Events.ShouldContainOnly(first_commit.Events);
-            result.Last().Events.ShouldContainOnly(second_commit.Events);
+            foreach(var envelope in result.First().Events)
+            {
+                first_commit.Events.Any(_ => 
+                        _.Event.Equals(envelope.Event)
+                    &&  _.Id.Equals(envelope.Id)
+                    &&  _.Metadata.LossyEquals(envelope.Metadata)
+                ).ShouldBeTrue();
+            }
+            foreach(var envelope in result.Last().Events)
+            {
+                second_commit.Events.Any(_ => 
+                        _.Event.Equals(envelope.Event)
+                    &&  _.Id.Equals(envelope.Id)
+                    &&  _.Metadata.LossyEquals(envelope.Metadata)
+                ).ShouldBeTrue();
+            }
         };
         Cleanup nh = () => event_store.Dispose();               
     }

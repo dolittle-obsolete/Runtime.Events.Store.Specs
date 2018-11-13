@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Dolittle.Artifacts;
+using Dolittle.Runtime.Events.Store.Specs.given;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_type
 {
@@ -45,7 +46,15 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
 
         It should_contain_all_the_events_of_the_specified_type = () => 
         {
-            result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(simple_events);
+            var envelopes = result.Select(e => e.ToEventEnvelope());
+            foreach(var envelope in envelopes)
+            {
+                simple_events.Any(_ => 
+                        _.Event.Equals(envelope.Event)
+                    &&  _.Id.Equals(envelope.Id)
+                    &&  _.Metadata.LossyEquals(envelope.Metadata)
+                ).ShouldBeTrue();
+            }
         };        
         Cleanup nh = () => event_store.Dispose();               
     }
