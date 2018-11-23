@@ -38,9 +38,9 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         };
         It should_have_the_events_in_each_commit = () => 
         {
-            result.First().Events.ShouldContainOnly(first_commit.Events);
-            result.Last().Events.ShouldContainOnly(second_commit.Events);
+            result.First().Events.ShouldEqual(first_commit.Events);
+            result.Last().Events.ShouldEqual(second_commit.Events);
         };
-        Cleanup nh = () => event_store.Dispose();               
+        Cleanup nh = () => event_store.Dispose();            
     }
 }
