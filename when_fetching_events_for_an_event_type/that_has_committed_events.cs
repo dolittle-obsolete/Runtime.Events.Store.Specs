@@ -45,7 +45,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
 
         It should_contain_all_the_events_of_the_specified_type = () => 
         {
-            result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(simple_events);
+            result.Select(e => e.ToEventEnvelope()).ShouldEqual(simple_events);
         };        
         Cleanup nh = () => event_store.Dispose();               
     }
