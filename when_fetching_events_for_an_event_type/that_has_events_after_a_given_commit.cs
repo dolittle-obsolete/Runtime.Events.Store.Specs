@@ -14,16 +14,16 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         static CommittedEventStream second_commit;
         static CommittedEventStream third_commit;
         static UncommittedEventStream uncommitted_events;
-        static EventSourceId event_source_id;
+        static EventSourceKey event_source;
         static DateTimeOffset? occurred;
         static SingleEventTypeEventStream result;
 
         Establish context = () => 
         {
             event_store = get_event_store();
-            event_source_id = EventSourceId.New();
+            event_source = get_event_source_key();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
-            uncommitted_events = event_source_id.BuildUncommitted(event_source_artifact,occurred);
+            uncommitted_events = event_source.BuildUncommitted(occurred);
             event_store._do((es) => first_commit = es.Commit(uncommitted_events));
             uncommitted_events = first_commit.BuildNext(DateTimeOffset.UtcNow);
             event_store._do((es) => second_commit = es.Commit(uncommitted_events));

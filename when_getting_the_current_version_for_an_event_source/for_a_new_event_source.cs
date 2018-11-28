@@ -15,7 +15,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_current_version_f
             event_store = get_event_store();
         };
 
-        Because of = () => event_store._do((event_store) => result = event_store.GetCurrentVersionFor(Guid.NewGuid()));
+        Because of = () => event_store._do((event_store) => result = event_store.GetCurrentVersionFor(get_event_source_key()));
 
         It should_return_no_version = () => result.ShouldEqual(EventSourceVersion.NoVersion);
 

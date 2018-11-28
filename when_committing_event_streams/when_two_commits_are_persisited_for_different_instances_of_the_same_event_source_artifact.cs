@@ -1,11 +1,11 @@
-﻿using Machine.Specifications;
+using Machine.Specifications;
 using Dolittle.Runtime.Events.Store.Specs;
 using System;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
 {
-    [Subject(typeof(ICommitEventStreams))]
-    public class when_two_commits_are_persisited_for_different_event_sources : given.an_event_store
+
+   public class when_two_commits_are_persisited_for_different_instances_of_the_same_event_source_artifact : given.an_event_store
     {
         static IEventStore event_store;
         static CommittedEventStream first_committed_events;
@@ -18,8 +18,8 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
-            first_uncommitted_events = get_event_source_key().BuildUncommitted(occurred);
-            second_uncommitted_events = get_event_source_key().BuildUncommitted(occurred);
+            first_uncommitted_events = get_event_source_key(EventSourceId.New(),event_source_artifact).BuildUncommitted(occurred);
+            second_uncommitted_events = get_event_source_key(EventSourceId.New(),event_source_artifact).BuildUncommitted(occurred);
         };
         Because of = () => 
         {
@@ -56,5 +56,5 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         };
         
         Cleanup nh = () => event_store.Dispose();
-    }
+    }    
 }

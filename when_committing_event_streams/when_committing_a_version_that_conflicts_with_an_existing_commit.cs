@@ -16,12 +16,12 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
-            var event_source = EventSourceId.New();
-            uncommitted_events = event_source.BuildUncommitted(event_source_artifact, occurred);
+            var event_source = get_event_source_key();
+            uncommitted_events = event_source.BuildUncommitted(occurred);
             var next = uncommitted_events.BuildNext();
             event_store._do(_ => _.Commit(uncommitted_events));
             event_store._do(_ => _.Commit(next));
-            conflicting_uncommitted_events = event_source.BuildUncommitted(event_source_artifact, occurred);
+            conflicting_uncommitted_events = event_source.BuildUncommitted(occurred);
         };
 
         Because of = () => event_store._do((es) => exception = Catch.Exception(() => es.Commit(conflicting_uncommitted_events)));

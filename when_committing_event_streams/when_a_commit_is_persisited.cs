@@ -16,7 +16,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow;
-            uncommitted_events = EventSourceId.New().BuildUncommitted(event_source_artifact, occurred);
+            uncommitted_events = get_event_source_key().BuildUncommitted(occurred);
         };
 
         Because of = () => event_store._do((event_store) => committed_events = event_store.Commit(uncommitted_events));

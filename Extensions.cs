@@ -29,11 +29,11 @@ namespace Dolittle.Runtime.Events.Store.Specs
             }
         }
 
-        public static UncommittedEventStream BuildUncommitted(this EventSourceId eventSourceId, ArtifactId eventSourceArtifact, DateTimeOffset? now = null, CorrelationId correlationId = null)
+        public static UncommittedEventStream BuildUncommitted(this EventSourceKey eventSource, DateTimeOffset? now = null, CorrelationId correlationId = null)
         {
             var committed = now ?? DateTimeOffset.Now;
             var events = BuildEvents();
-            VersionedEventSource versionedEventSource = eventSourceId.InitialVersion(eventSourceArtifact);
+            VersionedEventSource versionedEventSource = eventSource.Id.InitialVersion(eventSource.Artifact);
             return BuildFrom(versionedEventSource,committed,correlationId ?? Guid.NewGuid(),events);
             
         }
@@ -44,7 +44,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             VersionedEventSource vsn = null;
             events.ForEach(e => 
             {
-                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),vsn.EventSource,vsn.Artifact);
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),new EventSourceKey(vsn.EventSource,vsn.Artifact));
                 envelopes.Add(e.ToEnvelope(BuildEventMetadata(EventId.New(),vsn, e.ToArtifact().Initial(), correlationId, committed)));
             });
 
@@ -59,7 +59,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             VersionedEventSource vsn = null;
             events.ForEach(e => 
             {
-                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),vsn.EventSource,vsn.Artifact);
+                vsn = vsn == null ? version : new VersionedEventSource(vsn.Version.NextSequence(),new EventSourceKey(vsn.EventSource,vsn.Artifact));
                 envelopes.Add(e.ToNewEnvelope(vsn,committed,correlationId));
             });
 
@@ -110,7 +110,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
 
         public static VersionedEventSource InitialVersion(this EventSourceId eventSourceId, ArtifactId artifact)
         {
-            return new VersionedEventSource(EventSourceVersion.Initial, eventSourceId, artifact);
+            return new VersionedEventSource(EventSourceVersion.Initial, new EventSourceKey(eventSourceId, artifact));
         }
 
         public static VersionedEventSource Next(this VersionedEventSource version)
@@ -118,7 +118,7 @@ namespace Dolittle.Runtime.Events.Store.Specs
             Ensure.IsNotNull("version",version);
             Ensure.ArgumentPropertyIsNotNull("version","Version",version.Version);
             Ensure.ArgumentPropertyIsNotNull("version","EventSource",version.EventSource);
-            return new VersionedEventSource(version.Version.Next(), version.EventSource, version.Artifact);
+            return new VersionedEventSource(version.Version.Next(), new EventSourceKey(version.EventSource, version.Artifact));
         }
 
         public static EventStream ToEventStream(this IEnumerable<EventEnvelope> envelopes)

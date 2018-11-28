@@ -10,7 +10,7 @@
     {
         static IEventStore event_store;
         static UncommittedEventStream uncommitted_events;
-        static EventSourceId event_source_id;
+        static EventSourceKey event_source;
         static DateTimeOffset? occurred;
         static EventSourceVersion version;
 
@@ -18,12 +18,12 @@
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
-            event_source_id = EventSourceId.New();
-            uncommitted_events = event_source_id.BuildUncommitted(event_source_artifact, occurred);
+            event_source = get_event_source_key();
+            uncommitted_events = event_source.BuildUncommitted(occurred);
             event_store._do(_ => _.Commit(uncommitted_events));
         };
 
-        Because of = () => event_store._do((es) => version = es.GetNextVersionFor(event_source_id));
+        Because of = () => event_store._do((es) => version = es.GetNextVersionFor(event_source));
 
         It should_get_the_the_second_commit = () => version.Commit.ShouldEqual(2ul);
         It should_have_a_sequence_of_0 = () => version.Sequence.ShouldEqual(0u);

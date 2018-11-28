@@ -14,7 +14,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         static CommittedEventStream first_commit;
         static CommittedEventStream second_commit;
         static UncommittedEventStream uncommitted_events;
-        static EventSourceId event_source_id;
+        static EventSourceKey event_source;
         static DateTimeOffset? occurred;
         static SingleEventTypeEventStream result;
 
@@ -27,9 +27,9 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
             simple_events = new List<EventEnvelope>();
             event_store = get_event_store();
             simple_event_artifact = event_artifacts[typeof(SimpleEvent)];
-            event_source_id = EventSourceId.New();
+            event_source = get_event_source_key();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);
-            uncommitted_events = event_source_id.BuildUncommitted(event_source_artifact, occurred);
+            uncommitted_events = event_source.BuildUncommitted(occurred);
             simple_events.AddRange(uncommitted_events.Events.FilteredByEventType(simple_event_artifact));
             event_store._do((es) => first_commit = es.Commit(uncommitted_events));
             uncommitted_events = first_commit.BuildNext(DateTimeOffset.UtcNow);
