@@ -6,7 +6,7 @@ This is not a .csproj.  Instead it should be included in the implementation as a
 
 ```
 
-git submodule add https://github.com/dolittle/Runtime.Events.Store.Specs.git Specifications/Specs
+git submodule add https://github.com/dolittle/Runtime.Events.Store.Specs.git Specifications/Store/Specs
 
 ```
 
