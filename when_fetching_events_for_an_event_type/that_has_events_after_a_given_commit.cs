@@ -1,11 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Linq;
-using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_type
 {
-
     [Subject(typeof(IFetchCommittedEvents))]
     public class that_has_events_after_a_given_commit : given.an_event_store
     {
@@ -18,7 +19,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         static DateTimeOffset? occurred;
         static SingleEventTypeEventStream result;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             event_source = get_event_source_key();
@@ -35,10 +36,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
 
         It should_retrieve_all_the_commits_for_the_event_source_from_the_specified_version = () => result.Count().ShouldEqual(2);
         It should_retrieve_the_events_in_commit_order = () => result.ShouldBeInOrder();
-        It should_have_the_events_in_only_commit_after_the_specified = () => 
-        {
-            result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(third_commit.Events.FilteredByEventType(event_artifacts[typeof(SimpleEvent)]));
-        };
-        Cleanup nh = () => event_store.Dispose();               
-    }    
+        It should_have_the_events_in_only_commit_after_the_specified = () => result.Select(e => e.ToEventEnvelope()).ShouldContainOnly(third_commit.Events.FilteredByEventType(event_artifacts[typeof(SimpleEvent)]));
+        Cleanup nh = () => event_store.Dispose();
+    }
 }

@@ -1,6 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Linq;
-using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_type
@@ -12,7 +13,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         static EventSourceId event_source_id;
         static SingleEventTypeEventStream result;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             event_source_id = EventSourceId.New();
@@ -21,7 +22,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         Because of = () => event_store._do((es) => result = es.FetchAllEventsOfType(event_artifacts[typeof(SimpleEvent)]));
 
         It should_retrieve_an_empty_event_stream = () => result.Any().ShouldBeFalse();
-        
-        Cleanup nh = () => event_store.Dispose();               
-    }    
+
+        Cleanup nh = () => event_store.Dispose();
+    }
 }

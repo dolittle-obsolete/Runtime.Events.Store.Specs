@@ -1,10 +1,11 @@
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
+using Machine.Specifications;
+
 namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_next_version_for_an_event_source
 {
-    using Machine.Specifications;
-    using Dolittle.Runtime.Events.Store;
-    using System;
-    using System.Linq;
-
     [Subject(typeof(IFetchEventSourceVersion))]
     public class for_an_event_source_with_commits : given.an_event_store
     {
@@ -14,7 +15,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_getting_the_next_version_for_
         static DateTimeOffset? occurred;
         static EventSourceVersion version;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);

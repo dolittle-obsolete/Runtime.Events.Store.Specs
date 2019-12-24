@@ -1,6 +1,8 @@
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_type
@@ -17,7 +19,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
         static DateTimeOffset? occurred;
         static SingleEventTypeEventStream result;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             event_source = get_event_source_key();
@@ -30,9 +32,9 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_fetching_events_for_an_event_
             event_store._do((es) => third_commit = es.Commit(uncommitted_events));
         };
 
-        Because of = () => event_store._do((es) => result = es.FetchAllEventsOfTypeAfter(event_artifacts[typeof(SimpleEvent)],4));
+        Because of = () => event_store._do((es) => result = es.FetchAllEventsOfTypeAfter(event_artifacts[typeof(SimpleEvent)], 4));
 
         It should_retrieve_no_events = () => result.Count().ShouldEqual(0);
-        Cleanup nh = () => event_store.Dispose();               
-    }      
+        Cleanup nh = () => event_store.Dispose();
+    }
 }

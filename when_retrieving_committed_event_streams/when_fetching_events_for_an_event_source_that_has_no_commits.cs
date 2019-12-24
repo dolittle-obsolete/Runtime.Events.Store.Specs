@@ -1,6 +1,8 @@
-using System;
-using System.Linq;
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_streams
@@ -11,15 +13,12 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         static IEventStore event_store;
         static Commits result;
 
-        Establish context = () => 
-        {
-            event_store = get_event_store();
-        };
+        Establish context = () => event_store = get_event_store();
 
         Because of = () => event_store._do((es) => result = es.Fetch(get_event_source_key()));
 
         It should_retrieve_empty_commits = () => (result as IEnumerable<CommittedEventStream>).Count().ShouldEqual(0);
-        
-        Cleanup nh = () => event_store.Dispose();               
-    }    
+
+        Cleanup nh = () => event_store.Dispose();
+    }
 }

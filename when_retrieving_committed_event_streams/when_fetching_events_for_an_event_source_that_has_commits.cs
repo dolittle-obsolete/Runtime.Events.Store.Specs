@@ -1,6 +1,9 @@
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_streams
@@ -16,7 +19,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         static DateTimeOffset? occurred;
         static Commits result;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             event_source = get_event_source_key();
@@ -30,16 +33,19 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         Because of = () => result = event_store.Fetch(event_source);
 
         It should_retrieve_all_the_commits_for_the_event_source = () => (result as IEnumerable<CommittedEventStream>).Count().ShouldEqual(2);
-        It should_retrieve_the_commits_in_order = () => 
+
+        It should_retrieve_the_commits_in_order = () =>
         {
             result.First().Sequence.ShouldEqual(first_commit.Sequence);
             result.Last().Sequence.ShouldEqual(second_commit.Sequence);
         };
-        It should_have_the_events_in_each_commit = () => 
+
+        It should_have_the_events_in_each_commit = () =>
         {
             result.First().Events.ShouldEqual(first_commit.Events);
             result.Last().Events.ShouldEqual(second_commit.Events);
         };
-        Cleanup nh = () => event_store.Dispose();            
+
+        Cleanup nh = () => event_store.Dispose();
     }
 }

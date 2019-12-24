@@ -1,5 +1,8 @@
-using Machine.Specifications;
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
+using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
 {
@@ -12,7 +15,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_committing_event_streams
         static DateTimeOffset? occurred;
         static Exception exception;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             occurred = DateTimeOffset.UtcNow.AddSeconds(-10);

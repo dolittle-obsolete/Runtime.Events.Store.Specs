@@ -1,21 +1,18 @@
-using System;
-using System.Collections.Generic;
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Linq;
-using Dolittle.Runtime.Events.Store;
-using System.Diagnostics.Contracts;
-using Machine.Specifications;
-using Dolittle.Collections;
 using Dolittle.Execution;
+using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs
 {
-
-    public static class ShouldExtensions 
+    public static class ShouldExtensions
     {
         public static CommittedEventStream ShouldCorrespondTo(this CommittedEventStream result, UncommittedEventStream uncommittedEventStream)
         {
             Ensure.IsNotNull(nameof(uncommittedEventStream), uncommittedEventStream);
-            Ensure.IsNotNull(nameof(result),result);
+            Ensure.IsNotNull(nameof(result), result);
             Ensure.ArgumentPropertyIsNotNull(nameof(uncommittedEventStream), "Events", uncommittedEventStream.Events);
             Ensure.ArgumentPropertyIsNotNull(nameof(result), "Events", result.Events);
 
@@ -29,11 +26,12 @@ namespace Dolittle.Runtime.Events.Store.Specs
             Ensure.IsNotNull(nameof(eventStream), eventStream);
             eventStream.Any().ShouldBeTrue();
             CommittedEventEnvelope prev = null;
-            foreach(var evt in eventStream)
+            foreach (var evt in eventStream)
             {
                 evt.CompareTo(prev).ShouldEqual(1);
                 prev = evt;
             }
+
             return eventStream;
         }
     }

@@ -1,6 +1,8 @@
+// Copyright (c) Dolittle. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using Machine.Specifications;
 
 namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_streams
@@ -17,7 +19,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         static DateTimeOffset? occurred;
         static Commits result;
 
-        Establish context = () => 
+        Establish context = () =>
         {
             event_store = get_event_store();
             event_source = get_event_source_key();
@@ -33,7 +35,7 @@ namespace Dolittle.Runtime.Events.Store.Specs.when_retrieving_committed_event_st
         Because of = () => event_store._do((es) => result = es.FetchFrom(event_source, 4));
 
         It should_retrieve_empty_commits = () => result.Count().ShouldEqual(0);
-        
-        Cleanup nh = () => event_store.Dispose();               
-    }      
+
+        Cleanup nh = () => event_store.Dispose();
+    }
 }
